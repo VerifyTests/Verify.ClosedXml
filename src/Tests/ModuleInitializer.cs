@@ -4,7 +4,7 @@
 
     [ModuleInitializer]
     public static void Initialize() =>
-        VerifyOpenXml.Initialize();
+        VerifyClosedXml.Initialize();
 
     #endregion
 

@@ -1,6 +1,6 @@
 ﻿namespace VerifyTests;
 
-public static class VerifyOpenXml
+public static class VerifyClosedXml
 {
     internal static List<JsonConverter> converters =
     [
