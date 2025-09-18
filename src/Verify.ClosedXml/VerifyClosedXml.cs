@@ -62,9 +62,12 @@ public static class VerifyClosedXml
             ShowWhiteSpace = book.ShowWhiteSpace,
         };
 
+        // force Created to a stable date so the binary will be consistent
+        book.Properties.Created = new(2020, 1, 1);
+
         var memoryStream = new MemoryStream();
         book.SaveAs(memoryStream);
-        List<Target> targets = [new("xlsx", memoryStream)];
+        List<Target> targets = [new("xlsx", memoryStream, performConversion: false)];
         if (sheets.Count == 1)
         {
             var (csv, _) = sheets[0];
