@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Verify.DiffPlex" />
     <PackageReference Include="Verify.Nunit" />
-    <ProjectReference Include="..\Verify.OpenXml\Verify.OpenXml.csproj" />
+    <ProjectReference Include="..\Verify.ClosedXml\Verify.ClosedXml.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
 
     <None Update="sample.*">
