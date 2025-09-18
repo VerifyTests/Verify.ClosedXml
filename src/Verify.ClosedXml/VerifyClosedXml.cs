@@ -63,7 +63,7 @@ public static class VerifyClosedXml
         };
 
         // force Created to a stable date so the binary will be consistent
-        book.Properties.Created = new(2020, 1, 1);
+        book.Properties.Created = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         var memoryStream = new MemoryStream();
         book.SaveAs(memoryStream);
@@ -136,6 +136,7 @@ public static class VerifyClosedXml
                     // Percentage
                     return cell.GetDouble().ToString("P", CultureInfo.InvariantCulture);
                 }
+
                 return cell.GetDouble().ToString(CultureInfo.InvariantCulture);
 
             case XLDataType.Boolean:
