@@ -1,7 +1,7 @@
 # <img src="/src/icon.png" height="30px"> Verify.ClosedXml
 
 [![Discussions](https://img.shields.io/badge/Verify-Discussions-yellow?svg=true&label=)](https://github.com/orgs/VerifyTests/discussions)
-[![Build status](https://ci.appveyor.com/api/projects/status/q1eqcnbptyjl24hp?svg=true)](https://ci.appveyor.com/project/SimonCropp/verify-closedxml)
+[![Build status](https://ci.appveyor.com/api/projects/status/xyn3eaf6i5tc9l5e?svg=true)](https://ci.appveyor.com/project/SimonCropp/verify-closedxml)
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.ClosedXml.svg)](https://www.nuget.org/packages/Verify.ClosedXml/)
 
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of Excel documents via [ClosedXML](https://github.com/ClosedXML/ClosedXML).<!-- singleLineInclude: intro. path: /docs/intro.include.md -->
@@ -10,7 +10,6 @@ Converts Excel documents (xlsx) to csv for verification.
 
 **See [Milestones](../../milestones?state=closed) for release notes.**
 
- 
 
 ## Sponsors
 
