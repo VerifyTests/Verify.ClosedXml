@@ -62,8 +62,7 @@ public static class VerifyClosedXml
             ShowWhiteSpace = book.ShowWhiteSpace,
         };
 
-        // force Created to a stable date so the binary will be consistent
-        book.Properties.Created = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        ForcePropsToBeStable(book);
 
         var memoryStream = new MemoryStream();
         book.SaveAs(memoryStream);
@@ -83,6 +82,14 @@ public static class VerifyClosedXml
             book.Dispose();
             return Task.CompletedTask;
         });
+    }
+
+    static DateTime stableDate = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    static void ForcePropsToBeStable(XLWorkbook book)
+    {
+        book.Properties.Created = stableDate;
+        book.Properties.Modified = stableDate;
+        book.Properties.Author = null;
     }
 
     static IEnumerable<(StringBuilder Csv, string? Name)> Convert(XLWorkbook document)
