@@ -1,1 +1,16 @@
-﻿
+﻿{
+  SheetNames: [
+    Sheet1
+  ],
+  Properties: {
+    Title: The Title
+  },
+  WorksheetCount: 1,
+  DefaultFont: Arial,
+  CalculateMode: Default,
+  Style: {
+    Font: {
+      Name: Arial
+    }
+  }
+}

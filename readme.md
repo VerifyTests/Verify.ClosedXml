@@ -1,10 +1,10 @@
-# <img src="/src/icon.png" height="30px"> Verify.OpenXML
+# <img src="/src/icon.png" height="30px"> Verify.ClosedXml
 
 [![Discussions](https://img.shields.io/badge/Verify-Discussions-yellow?svg=true&label=)](https://github.com/orgs/VerifyTests/discussions)
 [![Build status](https://ci.appveyor.com/api/projects/status/q1eqcnbptyjl24hp?svg=true)](https://ci.appveyor.com/project/SimonCropp/verify-openxml)
-[![NuGet Status](https://img.shields.io/nuget/v/Verify.OpenXML.svg)](https://www.nuget.org/packages/Verify.OpenXML/)
+[![NuGet Status](https://img.shields.io/nuget/v/Verify.ClosedXml.svg)](https://www.nuget.org/packages/Verify.ClosedXml/)
 
-Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of Excel documents via  [OpenXML](https://github.com/dotnet/Open-XML-SDK/).<!-- singleLineInclude: intro. path: /docs/intro.include.md -->
+Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of Excel documents via [ClosedXML](https://github.com/ClosedXML/ClosedXML).<!-- singleLineInclude: intro. path: /docs/intro.include.md -->
 
 Converts Excel documents (xlsx) to csv for verification.
 
@@ -17,14 +17,14 @@ Converts Excel documents (xlsx) to csv for verification.
 
 ### Entity Framework Extensions<!-- include: zzz. path: /docs/zzz.include.md -->
 
-[Entity Framework Extensions](https://entityframework-extensions.net/?utm_source=simoncropp&utm_medium=Verify.OpenXML) is a major sponsor and is proud to contribute to the development this project.
+[Entity Framework Extensions](https://entityframework-extensions.net/?utm_source=simoncropp&utm_medium=Verify.ClosedXml) is a major sponsor and is proud to contribute to the development this project.
 
-[![Entity Framework Extensions](https://raw.githubusercontent.com/VerifyTests/Verify.OpenXML/refs/heads/main/docs/zzz.png)](https://entityframework-extensions.net/?utm_source=simoncropp&utm_medium=Verify.OpenXML)<!-- endInclude -->
+[![Entity Framework Extensions](https://raw.githubusercontent.com/VerifyTests/Verify.ClosedXml/refs/heads/main/docs/zzz.png)](https://entityframework-extensions.net/?utm_source=simoncropp&utm_medium=Verify.ClosedXml)<!-- endInclude -->
 
 
 ## NuGet
 
- * https://nuget.org/packages/Verify.OpenXML
+ * https://nuget.org/packages/Verify.ClosedXml
 
 
 ## Usage
@@ -36,7 +36,7 @@ Converts Excel documents (xlsx) to csv for verification.
 ```cs
 [ModuleInitializer]
 public static void Initialize() =>
-    VerifyOpenXml.Initialize();
+    VerifyClosedXml.Initialize();
 ```
 <sup><a href='/src/Tests/ModuleInitializer.cs#L3-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-enable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -97,12 +97,12 @@ public Task XLWorkbook()
 <a id='snippet-Samples.VerifyExcel.verified.csv'></a>
 ```csv
 0,First Name,Last Name,Gender,Country,Date,Age,Id,Formula
-1,Dulce,Abril,Female,United States,2017-10-15,32,1562,1594
-2,Mara,Hashimoto,Female,Great Britain,2016-08-16,25,1582,1607
-3,Philip,Gent,Male,France,2015-05-21,36,2587,2623
-4,Kathleen,Hanner,Female,United States,2017-10-15,25,3549,3574
-5,Nereida,Magwood,Female,United States,2016-08-16,58,2468,2526
-6,Gaston,Brumm,Male,United States,2015-05-21,24,2554,2578
+1,Dulce,Abril,Female,United States,2017-10-15,32,1562,1594 (G2+H2)
+2,Mara,Hashimoto,Female,Great Britain,2016-08-16,25,1582,1607 (G3+H3)
+3,Philip,Gent,Male,France,2015-05-21,36,2587,2623 (G4+H4)
+4,Kathleen,Hanner,Female,United States,2017-10-15,25,3549,3574 (G5+H5)
+5,Nereida,Magwood,Female,United States,2016-08-16,58,2468,2526 (G6+H6)
+6,Gaston,Brumm,Male,United States,2015-05-21,24,2554,2578 (G7+H7)
 ```
 <sup><a href='/src/Tests/Samples.VerifyExcel.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcel.verified.csv' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

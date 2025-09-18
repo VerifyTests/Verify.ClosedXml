@@ -3,87 +3,15 @@
     Sheet1,
     Sheet2
   ],
-  Author: simon,
-  ColumnWidth: 8.43,
   Properties: {
-    Title: The Title,
-    Modified: DateTime_1,
-    LastModifiedBy: Simon Cropp
+    Title: The Title
   },
   WorksheetCount: 2,
-  Theme: {
-    Background1: Color [A=255, R=255, G=255, B=255],
-    Text1: Color [Black],
-    Background2: Color [A=255, R=231, G=230, B=230],
-    Text2: Color [A=255, R=68, G=84, B=106],
-    Accent1: Color [A=255, R=68, G=114, B=196],
-    Accent2: Color [A=255, R=237, G=125, B=49],
-    Accent3: Color [A=255, R=165, G=165, B=165],
-    Accent4: Color [A=255, R=255, G=192, B=0],
-    Accent5: Color [A=255, R=91, G=155, B=213],
-    Accent6: Color [A=255, R=112, G=173, B=71],
-    Hyperlink: Color [A=255, R=5, G=99, B=193],
-    FollowedHyperlink: Color [A=255, R=149, G=79, B=114]
-  },
-  Use1904DateSystem: false,
   DefaultFont: Arial,
   CalculateMode: Default,
-  ShowFormulas: false,
-  ShowGridLines: true,
-  ShowRowColHeaders: true,
-  ShowOutlineSymbols: true,
-  ShowZeros: true,
-  ShowRuler: true,
-  ShowWhiteSpace: true,
   Style: {
     Font: {
-      Bold: false,
-      Italic: false,
-      Underline: None,
-      Strikethrough: false,
-      Shadow: false,
-      FontSize: 10.0,
-      FontColor: Color [Black],
-      FontName: Arial,
-      FontFamilyNumbering: Swiss,
-      FontCharSet: Default
-    },
-    Alignment: {
-      Horizontal: General,
-      JustifyLastLine: false,
-      ShrinkToFit: false,
-      WrapText: false,
-      TopToBottom: false
-    },
-    Border: {
-      LeftBorder: None,
-      LeftBorderColor: Color [Black],
-      RightBorder: None,
-      RightBorderColor: Color [Black],
-      TopBorder: None,
-      TopBorderColor: Color [Black],
-      BottomBorder: None,
-      BottomBorderColor: Color [Black],
-      DiagonalBorder: None,
-      DiagonalBorderColor: Color [Black],
-      DiagonalUp: false,
-      DiagonalDown: false
-    },
-    Fill: {
-      BackgroundColor: Color [Transparent],
-      PatternColor: Color [Transparent],
-      PatternType: None
-    },
-    IncludeQuotePrefix: false,
-    NumberFormat: {
-      Format: 
-    },
-    Protection: {
-      Locked: true,
-      Hidden: false
-    },
-    DateFormat: {
-      Format: 
+      Name: Arial
     }
   }
 }

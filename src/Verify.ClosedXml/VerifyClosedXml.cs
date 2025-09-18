@@ -2,9 +2,18 @@
 
 public static class VerifyClosedXml
 {
-    internal static List<JsonConverter> converters =
+    static List<JsonConverter> converters =
     [
+        new InfoConverter(),
         new ColorConverter(),
+        new FontConverter(),
+        new StyleConverter(),
+        new FillConverter(),
+        new BorderConverter(),
+        new ProtectionConverter(),
+        new NumberFormatConverter(),
+        new AlignmentConverter(),
+        new WorkbookPropertiesConverter()
     ];
 
     public static bool Initialized { get; private set; }
@@ -29,33 +38,33 @@ public static class VerifyClosedXml
         return Convert(document, settings);
     }
 
-    static ConversionResult Convert(XLWorkbook workbook, IReadOnlyDictionary<string, object> settings)
+    static ConversionResult Convert(XLWorkbook book, IReadOnlyDictionary<string, object> settings)
     {
-        var sheets = Convert(workbook).ToList();
+        var sheets = Convert(book).ToList();
 
         var info = new Info
         {
             SheetNames = sheets.Select(_ => _.Name!).ToList(),
-            Author = workbook.Author,
-            ColumnWidth = workbook.ColumnWidth,
-            Style = workbook.Style,
-            Properties = workbook.Properties,
-            WorksheetCount = workbook.Worksheets.Count,
-            Theme = workbook.Theme,
-            Use1904DateSystem = workbook.Use1904DateSystem,
-            DefaultFont = workbook.Style.Font.FontName,
-            CalculateMode = workbook.CalculateMode,
-            ShowFormulas = workbook.ShowFormulas,
-            ShowGridLines = workbook.ShowGridLines,
-            ShowRowColHeaders = workbook.ShowRowColHeaders,
-            ShowOutlineSymbols = workbook.ShowOutlineSymbols,
-            ShowZeros = workbook.ShowZeros,
-            ShowRuler = workbook.ShowRuler,
-            ShowWhiteSpace = workbook.ShowWhiteSpace,
+            ColumnWidth = book.ColumnWidth,
+            Style = book.Style,
+            Properties = book.Properties,
+            WorksheetCount = book.Worksheets.Count,
+            //Theme = workbook.Theme,
+            Use1904DateSystem = book.Use1904DateSystem,
+            DefaultFont = book.Style.Font.FontName,
+            CalculateMode = book.CalculateMode,
+            ShowFormulas = book.ShowFormulas,
+            ShowGridLines = book.ShowGridLines,
+            ShowRowColHeaders = book.ShowRowColHeaders,
+            ShowOutlineSymbols = book.ShowOutlineSymbols,
+            ShowZeros = book.ShowZeros,
+            ShowRuler = book.ShowRuler,
+            ShowWhiteSpace = book.ShowWhiteSpace,
         };
 
-        //new("xlsx", CloneToStream(document))
-        List<Target> targets = [];
+        var memoryStream = new MemoryStream();
+        book.SaveAs(memoryStream);
+        List<Target> targets = [new("xlsx", memoryStream)];
         if (sheets.Count == 1)
         {
             var (csv, _) = sheets[0];
@@ -68,7 +77,7 @@ public static class VerifyClosedXml
 
         return new(info, targets, () =>
         {
-            workbook.Dispose();
+            book.Dispose();
             return Task.CompletedTask;
         });
     }
@@ -85,6 +94,16 @@ public static class VerifyClosedXml
                 {
                     var cellValue = GetCellValue(cell);
                     builder.Append(EscapeCsvValue(cellValue));
+
+                    if (cell.FormulaA1.Length > 0)
+                    {
+                        builder.Append($" ({EscapeCsvValue(cell.FormulaA1)})");
+                    }
+                    else if (cell.FormulaR1C1.Length > 0)
+                    {
+                        builder.Append($" ({EscapeCsvValue(cell.FormulaR1C1)})");
+                    }
+
                     builder.Append(',');
                 }
 
@@ -97,8 +116,11 @@ public static class VerifyClosedXml
     }
 
     static string GetCellValue(IXLCell cell)
-    { if (cell.IsEmpty())
+    {
+        if (cell.IsEmpty())
+        {
             return string.Empty;
+        }
 
         switch (cell.DataType)
         {
