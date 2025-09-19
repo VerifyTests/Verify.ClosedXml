@@ -6,7 +6,7 @@
     <LangVersion>preview</LangVersion>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <PackageTags>OpenXML, Verify</PackageTags>
-    <Description>Extends Verify (https://github.com/VerifyTests/Verify) to allow verification via OpenXML https://github.com/dotnet/Open-XML-SDK</Description>
+    <Description>Extends Verify (https://github.com/VerifyTests/Verify) to allow verification via ClosedXML (https://github.com/ClosedXML/ClosedXML)</Description>
     <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
