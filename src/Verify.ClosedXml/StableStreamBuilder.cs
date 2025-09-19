@@ -51,9 +51,7 @@
         rels.Delete();
         var newRels = archive.CreateEntry("_rels/.rels");
         using var stream = newRels.Open();
-        using var streamWriter = new StreamWriter(stream);
-        var format = xml.ToString();
-        streamWriter.Write(format);
+        xml.Save(stream);
     }
 
     static XDocument ReadXml(ZipArchiveEntry entry)
