@@ -1,8 +1,8 @@
-[Documentation](https://github.com/VerifyTests/Verify.Sylvan.Data.Excel)
+[Documentation](https://github.com/VerifyTests/Verify.ClosedXML)
 
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of Excel documents via [ClosedXML](https://github.com/ClosedXML/ClosedXML).<!-- singleLineInclude: intro. path: /docs/intro.include.md -->
 
-**See [Milestones](https://github.com/VerifyTests/Verify.Sylvan.Data.Excel/milestones?state=closed) for release notes.**
+**See [Milestones](https://github.com/VerifyTests/Verify.ClosedXML/milestones?state=closed) for release notes.**
 
 
 ## Sponsors
