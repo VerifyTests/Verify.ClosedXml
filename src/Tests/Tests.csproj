@@ -21,7 +21,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <PackageVersion Update="Verify.Nunit" Version="30.17.0" />
-  </ItemGroup>
 </Project>
