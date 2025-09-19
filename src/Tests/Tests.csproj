@@ -1,17 +1,20 @@
 
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFrameworks>net48;net9</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MarkdownSnippets.MsBuild" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Verify.DiffPlex" />
     <PackageReference Include="Verify.Nunit" />
+    <PackageReference Include="Polyfill" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.ClosedXml\Verify.ClosedXml.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
+    <Reference Include="System.Windows.Forms" Condition="'$(TargetFramework)' == 'net48'" />
 
     <None Update="sample.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
