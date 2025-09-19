@@ -57,6 +57,7 @@ public class Samples
 
         sheet.Cell("A3").Value = 2;
         sheet.Cell("B3").Value = "Jane Smith";
+
         return Verify(book);
     }
 
