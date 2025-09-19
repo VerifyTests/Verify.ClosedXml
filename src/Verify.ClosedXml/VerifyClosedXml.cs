@@ -73,11 +73,14 @@ public static class VerifyClosedXml
             targets.AddRange(sheets.Select(_ => new Target("csv", _.Csv, _.Name)));
         }
 
-        return new(info, targets, () =>
-        {
-            book.Dispose();
-            return Task.CompletedTask;
-        });
+        return new(
+            info,
+            targets,
+            () =>
+            {
+                book.Dispose();
+                return Task.CompletedTask;
+            });
     }
 
 
@@ -92,15 +95,15 @@ public static class VerifyClosedXml
                 foreach (var cell in row.Cells())
                 {
                     var cellValue = GetCellValue(cell);
-                    builder.Append(EscapeCsvValue(cellValue));
+                    builder.Append(Csv.Escape(cellValue));
 
                     if (cell.FormulaA1.Length > 0)
                     {
-                        builder.Append($" ({EscapeCsvValue(cell.FormulaA1)})");
+                        builder.Append($" ({Csv.Escape(cell.FormulaA1)})");
                     }
                     else if (cell.FormulaR1C1.Length > 0)
                     {
-                        builder.Append($" ({EscapeCsvValue(cell.FormulaR1C1)})");
+                        builder.Append($" ({Csv.Escape(cell.FormulaR1C1)})");
                     }
 
                     builder.Append(',');
@@ -153,20 +156,4 @@ public static class VerifyClosedXml
         }
     }
 
-    static string EscapeCsvValue(string value)
-    {
-        // Escape CSV special characters
-        if (value.Contains(',') ||
-            value.Contains('"') ||
-            value.Contains('\n') ||
-            value.Contains('\r'))
-        {
-            // Escape quotes by doubling them
-            value = value.Replace("\"", "\"\"");
-            // Wrap in quotes
-            value = "\"" + value + "\"";
-        }
-
-        return value;
-    }
 }
