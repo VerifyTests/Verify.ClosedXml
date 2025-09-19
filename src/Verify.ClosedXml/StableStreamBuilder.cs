@@ -46,7 +46,7 @@
 
         var workbookRelationship = relationships
             .Single(_ => _.Attribute("Target")!.Value.EndsWith("xl/workbook.xml"));
-        workbookRelationship.Attribute("Id")!.SetValue("Ra40fa3ed832944fe");
+        workbookRelationship.Attribute("Id")!.SetValue("VerifyClosedXml");
 
         rels.Delete();
         var newRels = archive.CreateEntry("_rels/.rels");
