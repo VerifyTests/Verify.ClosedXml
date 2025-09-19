@@ -62,11 +62,7 @@ public static class VerifyClosedXml
             ShowWhiteSpace = book.ShowWhiteSpace,
         };
 
-        ForcePropsToBeStable(book);
-
-        var memoryStream = new MemoryStream();
-        book.SaveAs(memoryStream);
-        List<Target> targets = [new("xlsx", memoryStream, performConversion: false)];
+        List<Target> targets = [new("xlsx", StableStreamBuilder.Build(book), performConversion: false)];
         if (sheets.Count == 1)
         {
             var (csv, _) = sheets[0];
@@ -84,13 +80,6 @@ public static class VerifyClosedXml
         });
     }
 
-    static DateTime stableDate = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-    static void ForcePropsToBeStable(XLWorkbook book)
-    {
-        book.Properties.Created = stableDate;
-        book.Properties.Modified = stableDate;
-        book.Properties.Author = null;
-    }
 
     static IEnumerable<(StringBuilder Csv, string? Name)> Convert(XLWorkbook document)
     {

@@ -70,7 +70,7 @@ public Task VerifyExcelStream()
     return Verify(stream, "xlsx");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L30-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcelStream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L48-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcelStream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -82,12 +82,22 @@ public Task VerifyExcelStream()
 [Test]
 public Task XLWorkbook()
 {
-    using var stream = File.OpenRead("sample.xlsx");
-    using var reader = new XLWorkbook(stream);
-    return Verify(reader);
+    using var book = new XLWorkbook();
+
+    var sheet = book.Worksheets.Add("Basic Data");
+
+    sheet.Cell("A1").Value = "ID";
+    sheet.Cell("B1").Value = "Name";
+
+    sheet.Cell("A2").Value = 1;
+    sheet.Cell("B2").Value = "John Doe";
+
+    sheet.Cell("A3").Value = 2;
+    sheet.Cell("B3").Value = "Jane Smith";
+    return Verify(book);
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L18-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-XLWorkbook' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L18-L38' title='Snippet source file'>snippet source</a> | <a href='#snippet-XLWorkbook' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

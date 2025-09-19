@@ -1,14 +1,16 @@
 ﻿{
   SheetNames: [
-    Basic Data
+    Sheet1
   ],
-  Properties: {},
+  Properties: {
+    Title: The Title
+  },
   WorksheetCount: 1,
-  DefaultFont: Calibri,
+  DefaultFont: Arial,
   CalculateMode: Default,
   Style: {
     Font: {
-      Name: Calibri
+      Name: Arial
     }
   }
 }

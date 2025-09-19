@@ -20,12 +20,30 @@ public class Samples
     [Test]
     public Task XLWorkbook()
     {
-        using var stream = File.OpenRead("sample.xlsx");
-        using var reader = new XLWorkbook(stream);
-        return Verify(reader);
+        using var book = new XLWorkbook();
+
+        var sheet = book.Worksheets.Add("Basic Data");
+
+        sheet.Cell("A1").Value = "ID";
+        sheet.Cell("B1").Value = "Name";
+
+        sheet.Cell("A2").Value = 1;
+        sheet.Cell("B2").Value = "John Doe";
+
+        sheet.Cell("A3").Value = 2;
+        sheet.Cell("B3").Value = "Jane Smith";
+        return Verify(book);
     }
 
     #endregion
+
+    [Test]
+    public Task XLWorkbookFromStream()
+    {
+        using var stream = File.OpenRead("sample.xlsx");
+        using var book = new XLWorkbook(stream);
+        return Verify(book);
+    }
 
     #region VerifyExcelStream
 
