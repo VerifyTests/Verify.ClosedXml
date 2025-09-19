@@ -54,7 +54,7 @@ public static void Initialize() =>
 public Task VerifyExcel() =>
     VerifyFile("sample.xlsx");
 ```
-<sup><a href='/src/Tests/Samples.cs#L6-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcel' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L31-L37' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcel' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -70,7 +70,7 @@ public Task VerifyExcelStream()
     return Verify(stream, "xlsx");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L48-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcelStream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L73-L82' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcelStream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -97,7 +97,7 @@ public Task XLWorkbook()
     return Verify(book);
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L18-L38' title='Snippet source file'>snippet source</a> | <a href='#snippet-XLWorkbook' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L43-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-XLWorkbook' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -107,12 +107,12 @@ public Task XLWorkbook()
 <a id='snippet-Samples.VerifyExcel.verified.csv'></a>
 ```csv
 0,First Name,Last Name,Gender,Country,Date,Age,Id,Formula
-1,Dulce,Abril,Female,United States,2017-10-15,32,1562,1594 (G2+H2)
-2,Mara,Hashimoto,Female,Great Britain,2016-08-16,25,1582,1607 (G3+H3)
-3,Philip,Gent,Male,France,2015-05-21,36,2587,2623 (G4+H4)
-4,Kathleen,Hanner,Female,United States,2017-10-15,25,3549,3574 (G5+H5)
-5,Nereida,Magwood,Female,United States,2016-08-16,58,2468,2526 (G6+H6)
-6,Gaston,Brumm,Male,United States,2015-05-21,24,2554,2578 (G7+H7)
+1,Dulce,Abril,Female,United States,DateTime_1,32,1562,1594 (G2+H2)
+2,Mara,Hashimoto,Female,Great Britain,DateTime_2,25,1582,1607 (G3+H3)
+3,Philip,Gent,Male,France,DateTime_3,36,2587,2623 (G4+H4)
+4,Kathleen,Hanner,Female,United States,DateTime_1,25,3549,3574 (G5+H5)
+5,Nereida,Magwood,Female,United States,DateTime_2,58,2468,2526 (G6+H6)
+6,Gaston,Brumm,Male,United States,DateTime_3,24,2554,2578 (G7+H7)
 ```
 <sup><a href='/src/Tests/Samples.VerifyExcel.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcel.verified.csv' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

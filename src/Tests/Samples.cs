@@ -3,6 +3,31 @@
 [TestFixture]
 public class Samples
 {
+    [Test]
+    public Task ScrubbingWithoutFormat() =>
+        VerifyFile("sample_scrubbingWithoutFormat.xlsx");
+
+    [Test]
+    public Task ScrubbingWithoutFormatDisableDateCounting() =>
+        VerifyFile("sample_scrubbingWithoutFormat.xlsx")
+            .DisableDateCounting();
+
+    [Test]
+    public Task ScrubbingWithoutFormatDontScrubDateTimes() =>
+        VerifyFile("sample_scrubbingWithoutFormat.xlsx")
+            .DontScrubDateTimes();
+
+    [Test]
+    public Task ScrubbingWithoutFormatDontScrubGuids() =>
+        VerifyFile("sample_scrubbingWithoutFormat.xlsx")
+            .DontScrubGuids();
+
+    [Test]
+    public Task DontScrub() =>
+        VerifyFile("sample.xlsx")
+            .DontScrubGuids().DontScrubDateTimes();
+
+
     #region VerifyExcel
 
     [Test]

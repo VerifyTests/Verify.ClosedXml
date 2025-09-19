@@ -86,6 +86,7 @@ public static class VerifyClosedXml
 
     static IEnumerable<(StringBuilder Csv, string? Name)> Convert(XLWorkbook document)
     {
+        var current = Counter.Current;
         foreach (var sheet in document.Worksheets)
         {
             var builder = new StringBuilder();
@@ -94,8 +95,13 @@ public static class VerifyClosedXml
             {
                 foreach (var cell in row.Cells())
                 {
-                    var cellValue = GetCellValue(cell);
-                    builder.Append(Csv.Escape(cellValue));
+                    var (value, replaceCellValue) = GetCellValue(cell, current);
+                    builder.Append(Csv.Escape(value));
+
+                    if (replaceCellValue)
+                    {
+                        cell.Value = value;
+                    }
 
                     if (cell.FormulaA1.Length > 0)
                     {
@@ -117,43 +123,51 @@ public static class VerifyClosedXml
         }
     }
 
-    static string GetCellValue(IXLCell cell)
+    static (string value, bool replaceCellValue) GetCellValue(IXLCell cell, Counter counter)
     {
         if (cell.IsEmpty())
         {
-            return string.Empty;
+            return (string.Empty, false);
         }
 
         switch (cell.DataType)
         {
-            case XLDataType.Text:
-                return cell.GetText();
-
             case XLDataType.Number:
+                var value = cell.GetDouble();
                 if (cell.Style.NumberFormat.Format.Contains('%'))
                 {
                     // Percentage
-                    return cell.GetDouble().ToString("P", CultureInfo.InvariantCulture);
+                    return (value.ToString("P", CultureInfo.InvariantCulture), false);
                 }
 
-                return cell.GetDouble().ToString(CultureInfo.InvariantCulture);
+                return (value.ToString(CultureInfo.InvariantCulture), false);
 
             case XLDataType.Boolean:
-                return cell.GetBoolean().ToString();
+                return (cell.GetBoolean().ToString(), false);
 
             case XLDataType.DateTime:
-                var dateTime = cell.GetDateTime();
-                return DateFormatter.Convert(dateTime);
+                var date = cell.GetDateTime();
+                if (counter.TryConvert(date, out var dateResult))
+                {
+                    return (dateResult, true);
+                }
+
+                return (DateFormatter.Convert(date), false);
 
             case XLDataType.TimeSpan:
-                return cell.GetTimeSpan().ToString();
+                return (cell.GetTimeSpan().ToString(), false);
 
             case XLDataType.Error:
-                return cell.GetError().ToString();
+                return (cell.GetError().ToString(), false);
 
             default:
-                return cell.GetText();
+                var text = cell.GetText();
+                if (counter.TryConvert(text, out var result))
+                {
+                    return (result, true);
+                }
+
+                return (text, false);
         }
     }
-
 }
