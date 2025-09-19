@@ -5,7 +5,7 @@
     <Version>0.1.0</Version>
     <LangVersion>preview</LangVersion>
     <AssemblyVersion>1.0.0</AssemblyVersion>
-    <PackageTags>OpenXML, Verify</PackageTags>
+    <PackageTags>ClosedXML, Excel, Verify</PackageTags>
     <Description>Extends Verify (https://github.com/VerifyTests/Verify) to allow verification via ClosedXML (https://github.com/ClosedXML/ClosedXML)</Description>
     <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
