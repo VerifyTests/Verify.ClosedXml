@@ -55,7 +55,7 @@ public Task VerifyExcel() =>
 <!-- endSnippet -->
 
 
-### Snapshot Resulting
+### Snapshot Result
 
 For a given Verify, the result is 3 (or more files)
 
