@@ -36,6 +36,7 @@ public class ConvertExcelSnapshots
 
             ExcelRender.Convert(file);
         }
+
         ExcelRender.Convert(Path.Combine(directory, "sample.xlxs"));
     }
 }
