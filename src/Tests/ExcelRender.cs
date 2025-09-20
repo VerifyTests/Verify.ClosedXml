@@ -73,6 +73,11 @@ public static class ExcelRender
         {
             try
             {
+                if (book != null)
+                {
+                    Marshal.ReleaseComObject(book);
+                }
+
                 if (excel != null)
                 {
                     excel.Quit();
