@@ -23,5 +23,7 @@
     <None Update="sample_*.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+
+    <None Remove="~$*" />
   </ItemGroup>
 </Project>
