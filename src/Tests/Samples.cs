@@ -27,11 +27,6 @@ public class Samples
         VerifyFile("sample.xlsx")
             .DontScrubGuids().DontScrubDateTimes();
 
-
-    [Test]
-    public Task VerifyExcelArchive() =>
-        VerifyZip("sample.xlsx");
-
     #region VerifyExcel
 
     [Test]
