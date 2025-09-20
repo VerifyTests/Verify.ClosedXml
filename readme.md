@@ -42,6 +42,13 @@ public static void Initialize() =>
 <!-- endSnippet -->
 
 
+### Input 
+
+For a given input Excel file.
+
+<img src="/src/Tests/sample_Sheet1.png">
+
+
 ### Verify a file
 
 <!-- snippet: VerifyExcel -->
