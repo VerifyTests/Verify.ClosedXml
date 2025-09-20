@@ -106,7 +106,28 @@ For a given Verify, the result is 3 (or more files)
 
 #### Metadata
 
-snippet: Samples.VerifyExcel.DotNet9_0.verified.txt
+<!-- snippet: Samples.VerifyExcel.DotNet9_0.verified.txt -->
+<a id='snippet-Samples.VerifyExcel.DotNet9_0.verified.txt'></a>
+```txt
+{
+  SheetNames: [
+    Sheet1
+  ],
+  Properties: {
+    Title: The Title
+  },
+  WorksheetCount: 1,
+  DefaultFont: Arial,
+  CalculateMode: Default,
+  Style: {
+    Font: {
+      Name: Arial
+    }
+  }
+}
+```
+<sup><a href='/src/Tests/Samples.VerifyExcel.DotNet9_0.verified.txt#L1-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcel.DotNet9_0.verified.txt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 
 #### CSV
@@ -114,7 +135,7 @@ snippet: Samples.VerifyExcel.DotNet9_0.verified.txt
 One per sheet
 
 <!-- snippet: Samples.VerifyExcel.DotNet9_0.verified.csv -->
-<a id='snippet-Samples.VerifyExcelStream.DotNet9_0.verified.csv'></a>
+<a id='snippet-Samples.VerifyExcel.DotNet9_0.verified.csv'></a>
 ```csv
 0,First Name,Last Name,Gender,Country,Date,Age,Id,Formula
 1,Dulce,Abril,Female,United States,DateTime_1,32,1562,1594 (G2+H2)
@@ -124,7 +145,7 @@ One per sheet
 5,Nereida,Magwood,Female,United States,DateTime_2,58,2468,2526 (G6+H6)
 6,Gaston,Brumm,Male,United States,DateTime_3,24,2554,2578 (G7+H7)
 ```
-<sup><a href='/src/Tests/Samples.VerifyExcelStream.DotNet9_0.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcelStream.DotNet9_0.verified.csv' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.VerifyExcel.DotNet9_0.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcel.DotNet9_0.verified.csv' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
