@@ -1,40 +1,58 @@
 ﻿static class StableStreamBuilder
 {
+    static DateTime stableDate = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    static DateTimeOffset stableDateOffset = new(stableDate);
+
     public static Stream Build(XLWorkbook book)
     {
         ForcePropsToBeStable(book);
 
-        var stream = new MemoryStream();
-        book.SaveAs(stream);
+        var sourceStream = new MemoryStream();
+        book.SaveAs(sourceStream);
 
-        using (var archive = new ZipArchive(stream, ZipArchiveMode.Update, leaveOpen: true))
+        var targetStream = new MemoryStream();
+        using (var sourceArchive = new ZipArchive(sourceStream, ZipArchiveMode.Read, leaveOpen: false))
+        using (var targetArchive = new ZipArchive(targetStream, ZipArchiveMode.Create, leaveOpen: true))
         {
-            RemovePsmdcp(archive);
-
-            PatchRels(archive);
-
-            archive.FixWriteTime();
+            foreach (var sourceEntry in sourceArchive.Entries)
+            {
+                DuplicateEntry(sourceEntry, targetArchive);
+            }
         }
 
-        stream.Position = 0;
-        return stream;
+        targetStream.Position = 0;
+        return targetStream;
     }
 
-    static void RemovePsmdcp(ZipArchive archive)
+    static void DuplicateEntry(ZipArchiveEntry sourceEntry, ZipArchive targetArchive)
     {
-        var entry = archive.Entries.SingleOrDefault(_ =>
-            _.FullName.StartsWith("package/services/metadata/core-properties/") &&
-            _.Name.EndsWith("psmdcp"));
-        entry?.Delete();
+        if (IsPsmdcp(sourceEntry))
+        {
+            return;
+        }
+
+        using var sourceStream = sourceEntry.Open();
+        var targetEntry = targetArchive.CreateEntry(sourceEntry.FullName, CompressionLevel.Fastest);
+        targetEntry.LastWriteTime = stableDateOffset;
+        using (var targetStream = targetEntry.Open())
+        {
+            if (IsRels(sourceEntry))
+            {
+                var xml = XDocument.Load(sourceStream);
+                PatchRelsXml(xml);
+                xml.Save(targetStream);
+            }
+            else
+            {
+                sourceStream.CopyTo(targetStream);
+            }
+        }
     }
 
-    static void PatchRels(ZipArchive archive)
+    static void PatchRelsXml(XDocument xml)
     {
-        var rels = archive.Entries.Single(_ => _.FullName == "_rels/.rels");
-
-        var xml = ReadXml(rels);
         var relationships = xml.Descendants(XName.Get("Relationship", "http://schemas.openxmlformats.org/package/2006/relationships")).ToList();
-        var psmdcpRelationship = relationships
+        var psmdcp = relationships
             .Where(rel =>
             {
                 var target = rel.Attribute("Target");
@@ -42,25 +60,19 @@
                        target.Value.EndsWith(".psmdcp");
             })
             .SingleOrDefault();
-        psmdcpRelationship?.Remove();
+        psmdcp?.Remove();
 
-        var workbookRelationship = relationships
+        var workbook = relationships
             .Single(_ => _.Attribute("Target")!.Value.EndsWith("xl/workbook.xml"));
-        workbookRelationship.Attribute("Id")!.SetValue("VerifyClosedXml");
-
-        rels.Delete();
-        var newRels = archive.CreateEntry("_rels/.rels");
-        using var stream = newRels.Open();
-        xml.Save(stream);
+        workbook.Attribute("Id")!.SetValue("VerifyClosedXml");
     }
 
-    static XDocument ReadXml(ZipArchiveEntry entry)
-    {
-        using var stream = entry.Open();
-        return XDocument.Load(stream);
-    }
+    static bool IsPsmdcp(ZipArchiveEntry entry) =>
+        entry.FullName.StartsWith("package/services/metadata/core-properties/") &&
+        entry.Name.EndsWith("psmdcp");
 
-    static DateTime stableDate = new(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    static bool IsRels(ZipArchiveEntry _) =>
+        _.FullName == "_rels/.rels";
 
     static void ForcePropsToBeStable(XLWorkbook book)
     {
