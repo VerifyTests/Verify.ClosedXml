@@ -29,56 +29,49 @@ public class ConvertExcelSnapshots
                 continue;
             }
 
-            var imageFile = file.Replace(".verified.xlsx",".png");
-            ExcelRender.Convert(file, imageFile);
+            if (!Path.GetFileName(file).Contains("Net9"))
+            {
+                continue;
+            }
+
+            ExcelRender.Convert(file);
         }
+        ExcelRender.Convert(Path.Combine(directory, "sample.xlxs"));
     }
 }
 
 public static class ExcelRender
 {
-    public static void Convert(string excelPath, string pngPath)
+    public static void Convert(string excelPath)
     {
         Application? excel = null;
-        Workbook? workbook = null;
-        Worksheet? worksheet = null;
+        Workbook? book = null;
 
         try
         {
             excel = new()
             {
                 Visible = true,
-                DisplayAlerts = false,
+                DisplayAlerts = true,
                 ScreenUpdating = true
             };
 
             // Open workbook
-            workbook = excel.Workbooks.Open(excelPath);
-            worksheet = (Worksheet) workbook.Sheets[1];
+            book = excel.Workbooks.Open(excelPath);
 
-            var range = worksheet.UsedRange;
-
-            range.CopyPicture(XlPictureAppearance.xlScreen, XlCopyPictureFormat.xlBitmap);
-
-            Thread.Sleep(1000);
-            using var image = Clipboard.GetImage()!;
-            image.Save(pngPath, ImageFormat.Png);
+            foreach (Worksheet sheet in book.Sheets)
+            {
+                RenderSheet(excelPath, sheet);
+            }
+        }
+        catch (Exception exception)
+        {
+            throw new("Failed for: " + excelPath, exception);
         }
         finally
         {
             try
             {
-                if (worksheet != null)
-                {
-                    Marshal.ReleaseComObject(worksheet);
-                }
-
-                if (workbook != null)
-                {
-                    workbook.Close(false);
-                    Marshal.ReleaseComObject(workbook);
-                }
-
                 if (excel != null)
                 {
                     excel.Quit();
@@ -90,6 +83,29 @@ public static class ExcelRender
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
+        }
+    }
+
+    static void RenderSheet(string excelPath, Worksheet sheet)
+    {
+        try
+        {
+            var range = sheet.UsedRange;
+            sheet.Activate();
+            range.Select();
+            Clipboard.Clear();
+            Thread.Sleep(100);
+            range.Copy();
+            range.CopyPicture(XlPictureAppearance.xlScreen, XlCopyPictureFormat.xlBitmap);
+
+            Thread.Sleep(100);
+            using var image = Clipboard.GetImage()!;
+            var imageFile = excelPath.Replace(".verified.xlsx", $"_{sheet.Name}_.png");
+            image.Save(imageFile, ImageFormat.Png);
+        }
+        finally
+        {
+            Marshal.ReleaseComObject(sheet);
         }
     }
 }
