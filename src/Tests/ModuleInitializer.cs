@@ -9,6 +9,9 @@
     #endregion
 
     [ModuleInitializer]
-    public static void InitializeOther() =>
+    public static void InitializeOther()
+    {
+        VerifierSettings.UniqueForTargetFrameworkAndVersion();
         VerifierSettings.InitializePlugins();
+    }
 }
