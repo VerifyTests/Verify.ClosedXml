@@ -54,7 +54,7 @@ public static void Initialize() =>
 public Task VerifyExcel() =>
     VerifyFile("sample.xlsx");
 ```
-<sup><a href='/src/Tests/Samples.cs#L31-L37' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcel' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L35-L41' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcel' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -70,7 +70,7 @@ public Task VerifyExcelStream()
     return Verify(stream, "xlsx");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L74-L83' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcelStream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L78-L87' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcelStream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -98,7 +98,7 @@ public Task XLWorkbook()
     return Verify(book);
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L43-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-XLWorkbook' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L47-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-XLWorkbook' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
