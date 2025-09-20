@@ -21,6 +21,7 @@ public class ConvertExcelSnapshots
             File.Delete(file);
         }
 
+        ExcelRender.Convert(Path.Combine(directory, "sample.xlsx"));
         var excelFiles = Directory.EnumerateFiles(directory, "*.verified.xlsx").ToList();
         foreach (var file in excelFiles)
         {
@@ -37,7 +38,6 @@ public class ConvertExcelSnapshots
             ExcelRender.Convert(file);
         }
 
-        ExcelRender.Convert(Path.Combine(directory, "sample.xlxs"));
     }
 }
 
@@ -45,6 +45,7 @@ public static class ExcelRender
 {
     public static void Convert(string excelPath)
     {
+        Thread.Sleep(100);
         Application? excel = null;
         Workbook? book = null;
 
@@ -106,7 +107,9 @@ public static class ExcelRender
 
             Thread.Sleep(100);
             using var image = Clipboard.GetImage()!;
-            var imageFile = excelPath.Replace(".verified.xlsx", $"_{sheet.Name}_.png");
+            var imageFile = excelPath
+                .Replace(".verified", "")
+                .Replace(".xlsx", $"_{sheet.Name}.png");
             image.Save(imageFile, ImageFormat.Png);
         }
         finally
