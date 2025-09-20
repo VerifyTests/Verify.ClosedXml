@@ -42,10 +42,7 @@ public static void Initialize() =>
 <!-- endSnippet -->
 
 
-### Excel
-
-
-#### Verify a file
+### Verify a file
 
 <!-- snippet: VerifyExcel -->
 <a id='snippet-VerifyExcel'></a>
@@ -58,7 +55,7 @@ public Task VerifyExcel() =>
 <!-- endSnippet -->
 
 
-#### Verify a Stream
+### Verify a Stream
 
 <!-- snippet: VerifyExcelStream -->
 <a id='snippet-VerifyExcelStream'></a>
@@ -74,7 +71,7 @@ public Task VerifyExcelStream()
 <!-- endSnippet -->
 
 
-#### Verify a SpreadsheetDocument
+### Verify a ClosedXML SpreadsheetDocument
 
 <!-- snippet: XLWorkbook -->
 <a id='snippet-XLWorkbook'></a>
@@ -104,7 +101,19 @@ public Task XLWorkbook()
 
 ### Example snapshot
 
-<!-- snippet: Samples.VerifyExcelStream.DotNet9_0.verified.csv -->
+For a given Verify, the result is 3 (or more files)
+
+
+#### Metadata
+
+snippet: Samples.VerifyExcel.DotNet9_0.verified.txt
+
+
+#### CSV
+
+One per sheet
+
+<!-- snippet: Samples.VerifyExcel.DotNet9_0.verified.csv -->
 <a id='snippet-Samples.VerifyExcelStream.DotNet9_0.verified.csv'></a>
 ```csv
 0,First Name,Last Name,Gender,Country,Date,Age,Id,Formula
@@ -117,3 +126,8 @@ public Task XLWorkbook()
 ```
 <sup><a href='/src/Tests/Samples.VerifyExcelStream.DotNet9_0.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcelStream.DotNet9_0.verified.csv' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+
+#### Excel file
+
+<img src="/src/Tests/Samples.VerifyExcel.DotNet9_0_Sheet1.png">
