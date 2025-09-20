@@ -55,51 +55,7 @@ public Task VerifyExcel() =>
 <!-- endSnippet -->
 
 
-### Verify a Stream
-
-<!-- snippet: VerifyExcelStream -->
-<a id='snippet-VerifyExcelStream'></a>
-```cs
-[Test]
-public Task VerifyExcelStream()
-{
-    var stream = new MemoryStream(File.ReadAllBytes("sample.xlsx"));
-    return Verify(stream, "xlsx");
-}
-```
-<sup><a href='/src/Tests/Samples.cs#L73-L82' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcelStream' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
-
-
-### Verify a ClosedXML SpreadsheetDocument
-
-<!-- snippet: XLWorkbook -->
-<a id='snippet-XLWorkbook'></a>
-```cs
-[Test]
-public Task XLWorkbook()
-{
-    using var book = new XLWorkbook();
-
-    var sheet = book.Worksheets.Add("Basic Data");
-
-    sheet.Cell("A1").Value = "ID";
-    sheet.Cell("B1").Value = "Name";
-
-    sheet.Cell("A2").Value = 1;
-    sheet.Cell("B2").Value = "John Doe";
-
-    sheet.Cell("A3").Value = 2;
-    sheet.Cell("B3").Value = "Jane Smith";
-
-    return Verify(book);
-}
-```
-<sup><a href='/src/Tests/Samples.cs#L42-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-XLWorkbook' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
-
-
-### Example snapshot
+### Snapshot Resulting
 
 For a given Verify, the result is 3 (or more files)
 
@@ -152,3 +108,47 @@ One per sheet
 #### Excel file
 
 <img src="/src/Tests/Samples.VerifyExcel.DotNet9_0_Sheet1.png">
+
+
+### Verify a Stream
+
+<!-- snippet: VerifyExcelStream -->
+<a id='snippet-VerifyExcelStream'></a>
+```cs
+[Test]
+public Task VerifyExcelStream()
+{
+    var stream = new MemoryStream(File.ReadAllBytes("sample.xlsx"));
+    return Verify(stream, "xlsx");
+}
+```
+<sup><a href='/src/Tests/Samples.cs#L73-L82' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyExcelStream' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### Verify a ClosedXML SpreadsheetDocument
+
+<!-- snippet: XLWorkbook -->
+<a id='snippet-XLWorkbook'></a>
+```cs
+[Test]
+public Task XLWorkbook()
+{
+    using var book = new XLWorkbook();
+
+    var sheet = book.Worksheets.Add("Basic Data");
+
+    sheet.Cell("A1").Value = "ID";
+    sheet.Cell("B1").Value = "Name";
+
+    sheet.Cell("A2").Value = 1;
+    sheet.Cell("B2").Value = "John Doe";
+
+    sheet.Cell("A3").Value = 2;
+    sheet.Cell("B3").Value = "Jane Smith";
+
+    return Verify(book);
+}
+```
+<sup><a href='/src/Tests/Samples.cs#L42-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-XLWorkbook' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
