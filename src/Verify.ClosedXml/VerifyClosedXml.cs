@@ -160,6 +160,9 @@ public static class VerifyClosedXml
             case XLDataType.Error:
                 return (cell.GetError().ToString(), false);
 
+            case XLDataType.Blank:
+                return ("", false);
+
             default:
                 var text = cell.GetText();
                 if (counter.TryConvert(text, out var result))
