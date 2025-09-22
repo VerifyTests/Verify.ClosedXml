@@ -1,4 +1,6 @@
-﻿namespace VerifyTests;
+﻿using DeterministicIoPackaging;
+
+namespace VerifyTests;
 
 public static class VerifyClosedXml
 {
@@ -62,7 +64,15 @@ public static class VerifyClosedXml
             ShowWhiteSpace = book.ShowWhiteSpace,
         };
 
-        List<Target> targets = [new("xlsx", StableStreamBuilder.Build(book), performConversion: false)];
+        book.Properties.Created = DeterministicPackage.StableDate;
+        book.Properties.Modified = DeterministicPackage.StableDate;
+        book.Properties.Author = null;
+
+        using var sourceStream = new MemoryStream();
+        book.SaveAs(sourceStream);
+        var resultStream = DeterministicPackage.Convert(sourceStream);
+
+        List<Target> targets = [new("xlsx", resultStream, performConversion: false)];
         if (sheets.Count == 1)
         {
             var (csv, _) = sheets[0];

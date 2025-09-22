@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ClosedXML" />
+    <PackageReference Include="DeterministicIoPackaging" />
     <PackageReference Include="DocumentFormat.OpenXml" />
     <PackageReference Include="Polyfill" PrivateAssets="all" />
     <PackageReference Include="Verify" />
