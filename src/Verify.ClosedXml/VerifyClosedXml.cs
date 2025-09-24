@@ -29,18 +29,18 @@ public static class VerifyClosedXml
 
         Initialized = true;
 
-        VerifierSettings.RegisterStreamConverter("xlsx", (_, target, settings) => Convert(target, settings));
-        VerifierSettings.RegisterFileConverter<XLWorkbook>(Convert);
+        VerifierSettings.RegisterStreamConverter("xlsx", Convert);
+        VerifierSettings.RegisterFileConverter<XLWorkbook>((target, context) => Convert(null, target));
         VerifierSettings.AddExtraSettings(_ => _.Converters.AddRange(converters));
     }
 
-    static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> settings)
+    static ConversionResult Convert(string? targetName, Stream stream, IReadOnlyDictionary<string, object> settings)
     {
         var document = new XLWorkbook(stream);
-        return Convert(document, settings);
+        return Convert(targetName, document);
     }
 
-    static ConversionResult Convert(XLWorkbook book, IReadOnlyDictionary<string, object> settings)
+    static ConversionResult Convert(string? targetName, XLWorkbook book)
     {
         var sheets = Convert(book).ToList();
 
@@ -71,12 +71,36 @@ public static class VerifyClosedXml
         List<Target> targets = [new("xlsx", resultStream, performConversion: false)];
         if (sheets.Count == 1)
         {
-            var (csv, _) = sheets[0];
-            targets.Add(new("csv", csv));
+            var (csv, sheetName) = sheets[0];
+            string? targetAndSheet;
+            if (targetName == null)
+            {
+                targetAndSheet = sheetName;
+            }
+            else
+            {
+                targetAndSheet = $"{targetName}-{sheetName}";
+            }
+
+            targets.Add(new("csv", csv, targetAndSheet));
         }
         else
         {
-            targets.AddRange(sheets.Select(_ => new Target("csv", _.Csv, _.Name)));
+            targets.AddRange(
+                sheets.Select(sheet =>
+                {
+                    string? targetAndSheet;
+                    if (targetName == null)
+                    {
+                        targetAndSheet = sheet.Name;
+                    }
+                    else
+                    {
+                        targetAndSheet = $"{targetName}-{sheet.Name}";
+                    }
+
+                    return new Target("csv", sheet.Csv, targetAndSheet);
+                }));
         }
 
         return new(
@@ -88,7 +112,6 @@ public static class VerifyClosedXml
                 return Task.CompletedTask;
             });
     }
-
 
     static IEnumerable<(StringBuilder Csv, string? Name)> Convert(XLWorkbook document)
     {
