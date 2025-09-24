@@ -30,7 +30,7 @@ public static class VerifyClosedXml
         Initialized = true;
 
         VerifierSettings.RegisterStreamConverter("xlsx", Convert);
-        VerifierSettings.RegisterFileConverter<XLWorkbook>((target, context) => Convert(null, target));
+        VerifierSettings.RegisterFileConverter<XLWorkbook>((target, _) => Convert(null, target));
         VerifierSettings.AddExtraSettings(_ => _.Converters.AddRange(converters));
     }
 
