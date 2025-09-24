@@ -64,10 +64,6 @@ public static class VerifyClosedXml
             ShowWhiteSpace = book.ShowWhiteSpace,
         };
 
-        book.Properties.Created = DeterministicPackage.StableDate;
-        book.Properties.Modified = DeterministicPackage.StableDate;
-        book.Properties.Author = null;
-
         using var sourceStream = new MemoryStream();
         book.SaveAs(sourceStream);
         var resultStream = DeterministicPackage.Convert(sourceStream);
