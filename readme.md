@@ -97,8 +97,8 @@ For a given Verify, the result is 3 (or more files)
 
 One per sheet
 
-<!-- snippet: Samples.VerifyExcel.DotNet9_0.verified.csv -->
-<a id='snippet-Samples.VerifyExcel.DotNet9_0.verified.csv'></a>
+<!-- snippet: Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv -->
+<a id='snippet-Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv'></a>
 ```csv
 0,First Name,Last Name,Gender,Country,Date,Age,Id,Formula
 1,Dulce,Abril,Female,United States,DateTime_1,32,1562,1594 (G2+H2)
@@ -108,7 +108,7 @@ One per sheet
 5,Nereida,Magwood,Female,United States,DateTime_2,58,2468,2526 (G6+H6)
 6,Gaston,Brumm,Male,United States,DateTime_3,24,2554,2578 (G7+H7)
 ```
-<sup><a href='/src/Tests/Samples.VerifyExcel.DotNet9_0.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcel.DotNet9_0.verified.csv' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
