@@ -115,7 +115,7 @@ public static class VerifyClosedXml
 
     static IEnumerable<(StringBuilder Csv, string? Name)> Convert(XLWorkbook document)
     {
-        var current = Counter.Current;
+        var counter = Counter.Current;
         foreach (var sheet in document.Worksheets)
         {
             var builder = new StringBuilder();
@@ -124,7 +124,7 @@ public static class VerifyClosedXml
             {
                 foreach (var cell in row.Cells())
                 {
-                    var (value, replaceCellValue) = GetCellValue(cell, current);
+                    var (value, replaceCellValue) = GetCellValue(cell, counter);
                     builder.Append(Csv.Escape(value));
 
                     if (replaceCellValue)
