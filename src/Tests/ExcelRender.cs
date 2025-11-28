@@ -14,7 +14,7 @@ public class ConvertExcelSnapshots
     [Explicit]
     public void Run()
     {
-        var directory = AttributeReader.GetProjectDirectory();
+        var directory = ProjectFiles.ProjectDirectory;
         var imageFiles = Directory.EnumerateFiles(directory, "*.png").ToList();
         foreach (var file in imageFiles)
         {
