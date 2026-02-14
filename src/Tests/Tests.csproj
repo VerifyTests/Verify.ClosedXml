@@ -11,6 +11,11 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Verify.DiffPlex" />
     <PackageReference Include="Verify.Nunit" />
+    <PackageReference Include="Argon" />
+    <PackageReference Include="DiffEngine" />
+    <PackageReference Include="EmptyFiles" />
+    <PackageReference Include="SimpleInfoName" />
+    <PackageReference Include="Verify" />
     <PackageReference Include="Polyfill" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.ClosedXml\Verify.ClosedXml.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
