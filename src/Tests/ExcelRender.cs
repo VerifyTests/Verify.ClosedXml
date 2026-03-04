@@ -37,7 +37,6 @@ public class ConvertExcelSnapshots
 
             ExcelRender.Convert(file);
         }
-
     }
 }
 
