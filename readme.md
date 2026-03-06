@@ -108,7 +108,7 @@ One per sheet
 5,Nereida,Magwood,Female,United States,DateTime_2,58,2468,2526 (G6+H6)
 6,Gaston,Brumm,Male,United States,DateTime_3,24,2554,2578 (G7+H7)
 ```
-<sup><a href='/src/Tests/Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.VerifyExcel.DotNet9_0%23Sheet1.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
