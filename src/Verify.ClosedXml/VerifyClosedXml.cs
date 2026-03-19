@@ -66,6 +66,7 @@ public static class VerifyClosedXml
 
         using var sourceStream = new MemoryStream();
         book.SaveAs(sourceStream);
+        FixPrefixedDefaultNamespaces(sourceStream);
         var resultStream = DeterministicPackage.Convert(sourceStream);
 
         List<Target> targets = [new("xlsx", resultStream, performConversion: false)];
@@ -150,6 +151,60 @@ public static class VerifyClosedXml
 
             yield return (builder, sheet.Name);
         }
+    }
+
+    static void FixPrefixedDefaultNamespaces(MemoryStream stream)
+    {
+        stream.Position = 0;
+        using var archive = new ZipArchive(stream, ZipArchiveMode.Update, leaveOpen: true);
+        XNamespace spreadsheetNs = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
+
+        foreach (var entry in archive.Entries)
+        {
+            if (!entry.FullName.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            XDocument xml;
+            using (var entryStream = entry.Open())
+            {
+                xml = XDocument.Load(entryStream);
+            }
+
+            var root = xml.Root;
+            if (root == null)
+            {
+                continue;
+            }
+
+            if (root.Name.Namespace != spreadsheetNs)
+            {
+                continue;
+            }
+
+            var prefix = root.GetPrefixOfNamespace(spreadsheetNs);
+            if (string.IsNullOrEmpty(prefix))
+            {
+                continue;
+            }
+
+            // Remove the prefixed namespace declaration and add a default one
+            var prefixedAttr = root.Attribute(XNamespace.Xmlns + prefix);
+            if (prefixedAttr != null)
+            {
+                prefixedAttr.Remove();
+                root.SetAttributeValue("xmlns", spreadsheetNs.NamespaceName);
+            }
+
+            using (var entryStream = entry.Open())
+            {
+                entryStream.SetLength(0);
+                xml.Save(entryStream);
+            }
+        }
+
+        stream.Position = 0;
     }
 
     static (string value, bool replaceCellValue) GetCellValue(IXLCell cell, Counter counter)
