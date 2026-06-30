@@ -39,6 +39,10 @@ public class Samples
     public Task MultipleSheets() =>
         VerifyFile("sample_multiple_sheets.xlsx");
 
+    [Test]
+    public Task HiddenRow() =>
+        VerifyFile("sample_hidden_row.xlsx");
+
     #region XLWorkbook
 
     [Test]
