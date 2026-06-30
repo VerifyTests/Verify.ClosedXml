@@ -145,8 +145,11 @@ public static class VerifyClosedXml
                     builder.Append(',');
                 }
 
-                builder.Length -= 1;
-                builder.AppendLineN();
+                if (builder.Length > 0)
+                {
+                    builder.Length -= 1;
+                    builder.AppendLineN();
+                }
             }
 
             yield return (builder, sheet.Name);
