@@ -11,12 +11,12 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="ProjectFiles" PrivateAssets="all" />
     <PackageReference Include="Verify.DiffPlex" />
-    <PackageReference Include="Verify.Nunit" VersionOverride="33.0.0-beta.3" />
+    <PackageReference Include="Verify.Nunit" VersionOverride="33.0.0-beta.4" />
     <PackageReference Include="Argon" />
     <PackageReference Include="DiffEngine" />
     <PackageReference Include="EmptyFiles" />
     <PackageReference Include="SimpleInfoName" />
-    <PackageReference Include="Verify" VersionOverride="33.0.0-beta.3" />
+    <PackageReference Include="Verify" VersionOverride="33.0.0-beta.4" />
     <PackageReference Include="Polyfill" PrivateAssets="all" />
     <ProjectReference Include="..\Verify.ClosedXml\Verify.ClosedXml.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
