@@ -1,7 +1,7 @@
 # <img src="/src/icon.png" height="30px"> Verify.ClosedXml
 
 [![Discussions](https://img.shields.io/badge/Verify-Discussions-yellow?svg=true&label=)](https://github.com/orgs/VerifyTests/discussions)
-[![Build status](https://img.shields.io/appveyor/build/SimonCropp/verify-closedxml)](https://ci.appveyor.com/project/SimonCropp/verify-closedxml)
+[![Build status](https://github.com/VerifyTests/Verify.ClosedXml/actions/workflows/build.yml/badge.svg)](https://github.com/VerifyTests/Verify.ClosedXml/actions/workflows/build.yml)
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.ClosedXml.svg)](https://www.nuget.org/packages/Verify.ClosedXml/)
 
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of Excel documents via [ClosedXML](https://github.com/ClosedXML/ClosedXML).<!-- singleLineInclude: intro. path: /docs/intro.include.md -->
