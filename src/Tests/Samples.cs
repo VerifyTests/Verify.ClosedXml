@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 
-[TestFixture]
 public class Samples
 {
     [Test]

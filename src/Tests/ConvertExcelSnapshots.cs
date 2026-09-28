@@ -1,6 +1,7 @@
 ﻿#if NET48 && DEBUG
-[TestFixture]
-[Apartment(ApartmentState.STA)]
+using TUnit.Core.Executors;
+
+[STAThreadExecutor]
 public class ConvertExcelSnapshots
 {
     [Test]
