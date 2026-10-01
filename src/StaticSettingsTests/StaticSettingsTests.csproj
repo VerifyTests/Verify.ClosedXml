@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <EnableTUnitPolyfills>false</EnableTUnitPolyfills>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ProjectFiles" PrivateAssets="all" />
+    <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="Argon" />
+    <PackageReference Include="DiffEngine" />
+    <PackageReference Include="EmptyFiles" />
+    <PackageReference Include="SimpleInfoName" />
+    <PackageReference Include="Verify" />
+    <ProjectReference Include="..\Verify.ClosedXml\Verify.ClosedXml.csproj" />
+    <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
+    <None Include="..\Tests\sample_multiple_sheets.xlsx" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

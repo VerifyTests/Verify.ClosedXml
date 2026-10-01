@@ -20,7 +20,10 @@ public static class VerifyClosedXml
 
     public static bool Initialized { get; private set; }
 
-    public static void Initialize()
+    static ClosedXmlOutputs outputs = ClosedXmlOutputs.All;
+
+    /// <param name="outputs">Which output kinds a workbook is split into. Defaults to <see cref="ClosedXmlOutputs.All"/>.</param>
+    public static void Initialize(ClosedXmlOutputs outputs = ClosedXmlOutputs.All)
     {
         if (Initialized)
         {
@@ -28,6 +31,7 @@ public static class VerifyClosedXml
         }
 
         Initialized = true;
+        VerifyClosedXml.outputs = outputs;
 
         VerifierSettings.RegisterStreamConverter("xlsx", Convert);
         VerifierSettings.RegisterFileConverter<XLWorkbook>((target, _) => Convert(null, target));
@@ -42,7 +46,8 @@ public static class VerifyClosedXml
 
     static ConversionResult Convert(string? targetName, XLWorkbook book)
     {
-        var sheets = Convert(book).ToList();
+        var includeCsv = outputs.HasFlag(ClosedXmlOutputs.Csv);
+        var sheets = Convert(book, includeCsv).ToList();
 
         var info = new Info
         {
@@ -70,6 +75,23 @@ public static class VerifyClosedXml
         var resultStream = DeterministicPackage.Convert(sourceStream);
 
         List<Target> targets = [new("xlsx", resultStream, performConversion: false)];
+        if (includeCsv)
+        {
+            AddCsvTargets(targetName, sheets, targets);
+        }
+
+        return new(
+            info,
+            targets,
+            () =>
+            {
+                book.Dispose();
+                return Task.CompletedTask;
+            });
+    }
+
+    static void AddCsvTargets(string? targetName, List<(StringBuilder Csv, string? Name)> sheets, List<Target> targets)
+    {
         if (sheets.Count == 1)
         {
             var (csv, sheetName) = sheets[0];
@@ -103,18 +125,9 @@ public static class VerifyClosedXml
                     return new Target("csv", sheet.Csv, targetAndSheet);
                 }));
         }
-
-        return new(
-            info,
-            targets,
-            () =>
-            {
-                book.Dispose();
-                return Task.CompletedTask;
-            });
     }
 
-    static IEnumerable<(StringBuilder Csv, string? Name)> Convert(XLWorkbook document)
+    static IEnumerable<(StringBuilder Csv, string? Name)> Convert(XLWorkbook document, bool includeCsv)
     {
         var counter = Counter.Current;
         foreach (var sheet in document.Worksheets)
@@ -126,12 +139,19 @@ public static class VerifyClosedXml
                 foreach (var cell in row.Cells())
                 {
                     var (value, replaceCellValue) = GetCellValue(cell, counter);
-                    builder.Append(Csv.Escape(value));
 
+                    // scrubbed values are written back to the workbook, so this runs even when csv is excluded
                     if (replaceCellValue)
                     {
                         cell.Value = value;
                     }
+
+                    if (!includeCsv)
+                    {
+                        continue;
+                    }
+
+                    builder.Append(Csv.Escape(value));
 
                     if (cell.FormulaA1.Length > 0)
                     {
