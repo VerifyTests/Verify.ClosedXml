@@ -8,6 +8,11 @@ namespace VerifyTests;
 public enum ClosedXmlOutputs
 {
     /// <summary>
+    /// No outputs. Only the source document (and info) is emitted.
+    /// </summary>
+    None = 0,
+
+    /// <summary>
     /// Emit a csv target per worksheet.
     /// </summary>
     Csv = 1,

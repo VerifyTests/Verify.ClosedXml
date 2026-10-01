@@ -4,7 +4,7 @@ public static class ModuleInitializer
 
     [ModuleInitializer]
     public static void Initialize() =>
-        VerifyClosedXml.Initialize(ClosedXmlOutputs.All & ~ClosedXmlOutputs.Csv);
+        VerifyClosedXml.Initialize(ClosedXmlOutputs.None);
 
     #endregion
 }

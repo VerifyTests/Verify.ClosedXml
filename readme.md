@@ -60,7 +60,7 @@ The xlsx and the metadata are always emitted. Excluded outputs are not generated
 ```cs
 [ModuleInitializer]
 public static void Initialize() =>
-    VerifyClosedXml.Initialize(ClosedXmlOutputs.All & ~ClosedXmlOutputs.Csv);
+    VerifyClosedXml.Initialize(ClosedXmlOutputs.None);
 ```
 <sup><a href='/src/StaticSettingsTests/ModuleInitializer.cs#L3-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-InitializeOutputs' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
