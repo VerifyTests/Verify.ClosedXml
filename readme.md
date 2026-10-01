@@ -46,6 +46,26 @@ public static void Initialize() =>
 <!-- endSnippet -->
 
 
+### Outputs
+
+`Initialize` accepts an optional `ClosedXmlOutputs` flags enum that controls, globally, which output kinds a workbook is split into:
+
+ * `Csv`: a csv target per worksheet.
+ * `All`: all of the above. This is the default.
+
+The xlsx and the metadata are always emitted. Excluded outputs are not generated, so no work is done for them.
+
+<!-- snippet: InitializeOutputs -->
+<a id='snippet-InitializeOutputs'></a>
+```cs
+[ModuleInitializer]
+public static void Initialize() =>
+    VerifyClosedXml.Initialize(ClosedXmlOutputs.All & ~ClosedXmlOutputs.Csv);
+```
+<sup><a href='/src/StaticSettingsTests/ModuleInitializer.cs#L3-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-InitializeOutputs' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
 ### Input 
 
 For a given input Excel file.
