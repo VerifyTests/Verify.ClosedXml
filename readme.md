@@ -51,6 +51,7 @@ public static void Initialize() =>
 `Initialize` accepts an optional `ClosedXmlOutputs` flags enum that controls, globally, which output kinds a workbook is split into:
 
  * `Csv`: a csv target per worksheet.
+ * `None`: none of the above. Only the info and the source document are emitted.
  * `All`: all of the above. This is the default.
 
 The xlsx and the metadata are always emitted. Excluded outputs are not generated, so no work is done for them.
