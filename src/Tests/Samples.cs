@@ -4,26 +4,26 @@ public class Samples
 {
     [Test]
     public Task ScrubbingWithoutFormat() =>
-        VerifyFile("sample_scrubbingWithoutFormat.xlsx");
+        VerifyFile(ProjectFiles.sample_scrubbingWithoutFormat_xlsx.Path);
 
     [Test]
     public Task ScrubbingWithoutFormatDisableDateCounting() =>
-        VerifyFile("sample_scrubbingWithoutFormat.xlsx")
+        VerifyFile(ProjectFiles.sample_scrubbingWithoutFormat_xlsx.Path)
             .DisableDateCounting();
 
     [Test]
     public Task ScrubbingWithoutFormatDontScrubDateTimes() =>
-        VerifyFile("sample_scrubbingWithoutFormat.xlsx")
+        VerifyFile(ProjectFiles.sample_scrubbingWithoutFormat_xlsx.Path)
             .DontScrubDateTimes();
 
     [Test]
     public Task ScrubbingWithoutFormatDontScrubGuids() =>
-        VerifyFile("sample_scrubbingWithoutFormat.xlsx")
+        VerifyFile(ProjectFiles.sample_scrubbingWithoutFormat_xlsx.Path)
             .DontScrubGuids();
 
     [Test]
     public Task DontScrub() =>
-        VerifyFile("sample.xlsx")
+        VerifyFile(ProjectFiles.sample_xlsx.Path)
             .DontScrubGuids().DontScrubDateTimes();
 
     #region VerifyExcel
@@ -36,11 +36,11 @@ public class Samples
 
     [Test]
     public Task MultipleSheets() =>
-        VerifyFile("sample_multiple_sheets.xlsx");
+        VerifyFile(ProjectFiles.sample_multiple_sheets_xlsx.Path);
 
     [Test]
     public Task HiddenRow() =>
-        VerifyFile("sample_hidden_row.xlsx");
+        VerifyFile(ProjectFiles.sample_hidden_row_xlsx.Path);
 
     #region XLWorkbook
 
@@ -68,7 +68,7 @@ public class Samples
     [Test]
     public Task XLWorkbookFromStream()
     {
-        using var stream = File.OpenRead("sample.xlsx");
+        using var stream = ProjectFiles.sample_xlsx.OpenRead();
         using var book = new XLWorkbook(stream);
         return Verify(book);
     }
