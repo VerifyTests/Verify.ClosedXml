@@ -20,10 +20,7 @@ public static class VerifyClosedXml
 
     public static bool Initialized { get; private set; }
 
-    static ClosedXmlOutputs outputs = ClosedXmlOutputs.All;
-
-    /// <param name="outputs">Which output kinds a workbook is split into. Defaults to <see cref="ClosedXmlOutputs.All"/>.</param>
-    public static void Initialize(ClosedXmlOutputs outputs = ClosedXmlOutputs.All)
+    public static void Initialize()
     {
         if (Initialized)
         {
@@ -31,22 +28,21 @@ public static class VerifyClosedXml
         }
 
         Initialized = true;
-        VerifyClosedXml.outputs = outputs;
 
-        VerifierSettings.RegisterStreamConverter("xlsx", Convert);
-        VerifierSettings.RegisterFileConverter<XLWorkbook>((target, _) => Convert(null, target));
+        VerifierSettings.RegisterStreamConverter("xlsx", (_, stream, context) => Convert(stream, context));
+        VerifierSettings.RegisterFileConverter<XLWorkbook>(Convert);
         VerifierSettings.AddExtraSettings(_ => _.Converters.AddRange(converters));
     }
 
-    static ConversionResult Convert(string? targetName, Stream stream, IReadOnlyDictionary<string, object> settings)
+    static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> context)
     {
         var document = new XLWorkbook(stream);
-        return Convert(targetName, document);
+        return Convert(document, context);
     }
 
-    static ConversionResult Convert(string? targetName, XLWorkbook book)
+    static ConversionResult Convert(XLWorkbook book, IReadOnlyDictionary<string, object> context)
     {
-        var includeCsv = outputs.HasFlag(ClosedXmlOutputs.Csv);
+        var includeCsv = !context.IsDerivedTargetExcluded("csv");
         var sheets = Convert(book, includeCsv).ToList();
 
         var info = new Info
@@ -69,62 +65,35 @@ public static class VerifyClosedXml
             ShowWhiteSpace = book.ShowWhiteSpace,
         };
 
-        using var sourceStream = new MemoryStream();
-        book.SaveAs(sourceStream);
-        FixPrefixedDefaultNamespaces(sourceStream);
-        var resultStream = DeterministicPackage.Convert(sourceStream);
-
-        List<Target> targets = [new("xlsx", resultStream, performConversion: false)];
-        if (includeCsv)
+        // the workbook is not saved when ExcludeTargets says it is not wanted
+        Target? source = null;
+        if (!context.IsTargetExcluded("xlsx"))
         {
-            AddCsvTargets(targetName, sheets, targets);
+            using var sourceStream = new MemoryStream();
+            book.SaveAs(sourceStream);
+            FixPrefixedDefaultNamespaces(sourceStream);
+            source = new("xlsx", DeterministicPackage.Convert(sourceStream));
         }
 
+        List<Target> derived = [];
+        if (includeCsv)
+        {
+            // named for the sheet alone, since Verify adds the name of the target being converted.
+            // Even for the only sheet, so that a second one adds a file rather than renaming the first
+            derived.AddRange(sheets.Select(_ => new Target("csv", _.Csv, _.Name)));
+        }
+
+        // telling the workbook from what was derived from it is what has Verify compare the workbook
+        // first, not convert it again, and tell the diff tool where the csv files came from
         return new(
             info,
-            targets,
+            source,
+            derived,
             () =>
             {
                 book.Dispose();
                 return Task.CompletedTask;
             });
-    }
-
-    static void AddCsvTargets(string? targetName, List<(StringBuilder Csv, string? Name)> sheets, List<Target> targets)
-    {
-        if (sheets.Count == 1)
-        {
-            var (csv, sheetName) = sheets[0];
-            string? targetAndSheet;
-            if (targetName == null)
-            {
-                targetAndSheet = sheetName;
-            }
-            else
-            {
-                targetAndSheet = $"{targetName}-{sheetName}";
-            }
-
-            targets.Add(new("csv", csv, targetAndSheet));
-        }
-        else
-        {
-            targets.AddRange(
-                sheets.Select(sheet =>
-                {
-                    string? targetAndSheet;
-                    if (targetName == null)
-                    {
-                        targetAndSheet = sheet.Name;
-                    }
-                    else
-                    {
-                        targetAndSheet = $"{targetName}-{sheet.Name}";
-                    }
-
-                    return new Target("csv", sheet.Csv, targetAndSheet);
-                }));
-        }
     }
 
     static IEnumerable<(StringBuilder Csv, string? Name)> Convert(XLWorkbook document, bool includeCsv)

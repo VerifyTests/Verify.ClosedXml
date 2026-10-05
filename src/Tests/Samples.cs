@@ -83,4 +83,45 @@ public class Samples
     }
 
     #endregion
+
+    #region ExcludeCsv
+
+    [Test]
+    public Task ExcludeCsv() =>
+        VerifyFile("sample.xlsx")
+            .ExcludeDerivedTargets("csv");
+
+    #endregion
+
+    #region ExcludeXlsx
+
+    [Test]
+    public Task ExcludeXlsx() =>
+        VerifyFile("sample.xlsx")
+            .ExcludeTargets("xlsx");
+
+    #endregion
+
+    #region NamedTarget
+
+    [Test]
+    public Task NamedTarget()
+    {
+        var stream = new MemoryStream(File.ReadAllBytes("sample.xlsx"));
+        return Verify(new Target("xlsx", stream, "Attachment1"));
+    }
+
+    #endregion
+
+    [Test]
+    public Task SheetNamesWithInvalidFileNameChars()
+    {
+        using var book = new XLWorkbook();
+
+        book.Worksheets.Add("Q1 <draft>").Cell("A1").Value = "first";
+        book.Worksheets.Add("Q1 |draft|").Cell("A1").Value = "second";
+        book.Worksheets.Add("Q2 <draft>").Cell("A1").Value = "third";
+
+        return Verify(book);
+    }
 }
