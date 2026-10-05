@@ -83,4 +83,96 @@ public class Samples
     }
 
     #endregion
+
+    #region ExcludeCsv
+
+    [Test]
+    public Task ExcludeCsv() =>
+        VerifyFile("sample.xlsx")
+            .ExcludeDerivedTargets("csv");
+
+    #endregion
+
+    #region ExcludeXlsx
+
+    [Test]
+    public Task ExcludeXlsx() =>
+        VerifyFile("sample.xlsx")
+            .ExcludeTargets("xlsx");
+
+    #endregion
+
+    #region NamedTarget
+
+    [Test]
+    public Task NamedTarget()
+    {
+        var stream = new MemoryStream(File.ReadAllBytes("sample.xlsx"));
+        return Verify(new Target("xlsx", stream, "Attachment1"));
+    }
+
+    #endregion
+
+    // A hidden sheet is verified as any other, so it has a csv. What says it is hidden is
+    // HiddenSheets in the info file.
+    [Test]
+    public Task HiddenSheet()
+    {
+        using var book = new XLWorkbook();
+
+        book.Worksheets.Add("Shown").Cell("A1").Value = "first";
+        var hidden = book.Worksheets.Add("Hidden");
+        hidden.Cell("A1").Value = "second";
+        hidden.Visibility = XLWorksheetVisibility.Hidden;
+
+        return Verify(book);
+    }
+
+    // A sheet that only code can unhide is verified as one Excel can
+    [Test]
+    public Task VeryHiddenSheet()
+    {
+        using var book = new XLWorkbook();
+
+        book.Worksheets.Add("Shown").Cell("A1").Value = "first";
+        var hidden = book.Worksheets.Add("Hidden");
+        hidden.Cell("A1").Value = "second";
+        hidden.Visibility = XLWorksheetVisibility.VeryHidden;
+
+        return Verify(book);
+    }
+
+    // A sheet is a page, so PagesToInclude limits the csv files. The info file still names every
+    // sheet, and the xlsx is still the whole workbook.
+    [Test]
+    public Task PagesToInclude() =>
+        VerifyFile(ProjectFiles.sample_multiple_sheets_xlsx.Path)
+            .PagesToInclude(_ => _ == 2);
+
+    // A hidden sheet is counted as any other, so here it is the first page
+    [Test]
+    public Task HiddenSheetIsCountedByPagesToInclude()
+    {
+        using var book = new XLWorkbook();
+
+        var hidden = book.Worksheets.Add("Hidden");
+        hidden.Cell("A1").Value = "first";
+        hidden.Visibility = XLWorksheetVisibility.Hidden;
+        book.Worksheets.Add("Shown").Cell("A1").Value = "second";
+
+        return Verify(book)
+            .PagesToInclude(1);
+    }
+
+    [Test]
+    public Task SheetNamesWithInvalidFileNameChars()
+    {
+        using var book = new XLWorkbook();
+
+        book.Worksheets.Add("Q1 <draft>").Cell("A1").Value = "first";
+        book.Worksheets.Add("Q1 |draft|").Cell("A1").Value = "second";
+        book.Worksheets.Add("Q2 <draft>").Cell("A1").Value = "third";
+
+        return Verify(book);
+    }
 }

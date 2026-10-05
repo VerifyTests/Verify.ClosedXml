@@ -46,25 +46,54 @@ public static void Initialize() =>
 <!-- endSnippet -->
 
 
-### Outputs
+### Choosing what is verified
 
-`Initialize` accepts an optional `ClosedXmlOutputs` flags enum that controls, globally, which output kinds a workbook is split into:
+A workbook is verified as the xlsx, an info file, and a csv of each sheet. What is left out is controlled by Verify's own settings, which every Verify plugin that splits a document shares: see [Leaving out what was derived](https://github.com/VerifyTests/Verify/blob/main/docs/paged-documents.md#leaving-out-what-was-derived) and [Excluding targets](https://github.com/VerifyTests/Verify/blob/main/docs/converter.md#excluding-targets). Anything left out is not produced at all (the csv is not built, the workbook is not saved), so these also save work.
 
- * `Csv`: a csv target per worksheet.
- * `None`: none of the above. Only the info and the source document are emitted.
- * `All`: all of the above. This is the default.
+`ExcludeDerivedTargets("csv")` leaves out the csv of each sheet, keeping the workbook and its info file:
 
-The xlsx and the metadata are always emitted. Excluded outputs are not generated, so no work is done for them.
+<!-- snippet: ExcludeCsv -->
+<a id='snippet-ExcludeCsv'></a>
+```cs
+[Test]
+public Task ExcludeCsv() =>
+    VerifyFile("sample.xlsx")
+        .ExcludeDerivedTargets("csv");
+```
+<sup><a href='/src/Tests/Samples.cs#L87-L94' title='Snippet source file'>snippet source</a> | <a href='#snippet-ExcludeCsv' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+`ExcludeTargets("xlsx")` leaves out the workbook, keeping the info file and the csv of each sheet:
+
+<!-- snippet: ExcludeXlsx -->
+<a id='snippet-ExcludeXlsx'></a>
+```cs
+[Test]
+public Task ExcludeXlsx() =>
+    VerifyFile("sample.xlsx")
+        .ExcludeTargets("xlsx");
+```
+<sup><a href='/src/Tests/Samples.cs#L96-L103' title='Snippet source file'>snippet source</a> | <a href='#snippet-ExcludeXlsx' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Each can also be set for every test, on `VerifierSettings`:
 
 <!-- snippet: InitializeOutputs -->
 <a id='snippet-InitializeOutputs'></a>
 ```cs
 [ModuleInitializer]
-public static void Initialize() =>
-    VerifyClosedXml.Initialize(ClosedXmlOutputs.None);
+public static void Initialize()
+{
+    VerifyClosedXml.Initialize();
+
+    // For every test: no csv, so only the workbook and its info are verified
+    VerifierSettings.ExcludeDerivedTargets("csv");
+}
 ```
-<sup><a href='/src/StaticSettingsTests/ModuleInitializer.cs#L3-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-InitializeOutputs' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/StaticSettingsTests/ModuleInitializer.cs#L3-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-InitializeOutputs' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+A workbook has no pages, so the settings for the pages of a document, `PageText` and `PagesToInclude`, have no effect on it.
 
 
 ### Input 
@@ -120,7 +149,7 @@ For a given Verify, the result is 3 (or more files)
 
 #### CSV
 
-One per sheet
+One per sheet, named for the sheet: `#Sheet1.verified.csv`. A workbook with one sheet is no exception, so that a second sheet adds a file rather than renaming the first. A hidden sheet has a csv as any other, and is named under `HiddenSheets` in the info file. A sheet is a page, numbered in tab order with hidden sheets counted, so `PagesToInclude` leaves out the csv of a sheet. The info file still names every sheet, and the xlsx is still the whole workbook.
 
 <!-- snippet: Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv -->
 <a id='snippet-Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv'></a>
@@ -135,6 +164,8 @@ One per sheet
 ```
 <sup><a href='/src/Tests/Samples.VerifyExcel.DotNet9_0%23Sheet1.verified.csv#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+Characters of a sheet name that a file name cannot hold are replaced with `-`: a sheet named `Q2 <draft>` is `#Q2 -draft-.verified.csv`. Sheets that are then named the same are told apart by an index: `Q1 <draft>` and `Q1 |draft|` are `#Q1 -draft-.00.verified.csv` and `#Q1 -draft-.01.verified.csv`.
 
 
 #### Excel file
@@ -186,6 +217,26 @@ public Task XLWorkbook()
 <!-- endSnippet -->
 
 
+### Verify a named target
+
+An xlsx can be a named target of a verification, the way an attachment of a mail message is:
+
+<!-- snippet: NamedTarget -->
+<a id='snippet-NamedTarget'></a>
+```cs
+[Test]
+public Task NamedTarget()
+{
+    var stream = new MemoryStream(File.ReadAllBytes("sample.xlsx"));
+    return Verify(new Target("xlsx", stream, "Attachment1"));
+}
+```
+<sup><a href='/src/Tests/Samples.cs#L105-L114' title='Snippet source file'>snippet source</a> | <a href='#snippet-NamedTarget' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Verify names the files relative to the target that was converted, so they take its name: `#Attachment1.verified.xlsx`, `#Attachment1.verified.txt` and `#Attachment1.Sheet1.verified.csv`.
+
+
 ### Binary output across .NET frameworks
 
 When verifying binary package output (xlsx, docx, nupkg, etc.) across multiple target frameworks (e.g. net48 and net10.0), the binary output may differ due to Deflate compression implementation differences. The XML content within entries is identical — only the compressed bytes differ. Use `UniqueForRuntime` to generate framework-specific verified files:
@@ -196,3 +247,33 @@ await Verify(stream, extension: "xlsx")
 ```
 
 See [Verify Naming docs](https://github.com/VerifyTests/Verify/blob/main/docs/naming.md) for more details.
+
+
+## Reviewing changes
+
+A change to a workbook is a change to several files: the xlsx, its info file, and the csv of every sheet. Verify tells the diff tool that the csv files and the info file were derived from the xlsx, and [DiffEngineViewer](https://github.com/VerifyTests/DiffEngine/blob/main/docs/viewer.md#files-derived-from-a-document), which reads and draws an xlsx itself, shows them as one row and accepts them together. Other diff tools are given each file, as before.
+
+
+## Migrating from 1.x
+
+Version 2 moves to the [source and derived targets](https://github.com/VerifyTests/Verify/blob/main/docs/converter.md#source-and-derived-targets) of Verify 33.3. The `outputs` parameter of `Initialize` is gone, and `ClosedXmlOutputs` is obsolete as an error, so that code naming it is pointed here. What they chose is chosen with Verify's settings, which can be set for one verification as well as for every test:
+
+| 1.x | 2.x |
+| --- | --- |
+| `Initialize(ClosedXmlOutputs.None)` | `Initialize()` and `VerifierSettings.ExcludeDerivedTargets("csv")` |
+| `Initialize(ClosedXmlOutputs.Csv)` | `Initialize()` |
+| `Initialize(ClosedXmlOutputs.All)` | `Initialize()` |
+
+Verify's `ExcludeTargets("xlsx")` already left out the workbook. With it, the workbook is now not saved at all.
+
+The snapshots of a workbook that is verified directly, as a file, a stream or an `XLWorkbook`, keep their names and their content. Nothing has to be accepted again.
+
+An xlsx that is a [named target](#verify-a-named-target) is the exception. The plugin built the name of each csv from the name of the target, and left the workbook and its info file with no name. All three are now named by Verify, relative to the target. For a test `Tests.Mail` whose target is an xlsx named `Attachment1`:
+
+| 1.x | 2.x |
+| --- | --- |
+| `Tests.Mail.verified.xlsx` | `Tests.Mail#Attachment1.verified.xlsx` |
+| `Tests.Mail.verified.txt` | `Tests.Mail#Attachment1.verified.txt` |
+| `Tests.Mail#Attachment1-Sheet1.verified.csv` | `Tests.Mail#Attachment1.Sheet1.verified.csv` |
+
+Renamed snapshots show as a new file and a pending delete. Accepting both, or running once with [AutoVerify](https://github.com/VerifyTests/Verify/blob/main/docs/autoverify.md), moves a test over, and since the content of the files is unchanged, source control shows each as a rename.

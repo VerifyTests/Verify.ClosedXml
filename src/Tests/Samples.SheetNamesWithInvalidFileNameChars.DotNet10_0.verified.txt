@@ -1,0 +1,16 @@
+﻿{
+  SheetNames: [
+    Q1 <draft>,
+    Q1 |draft|,
+    Q2 <draft>
+  ],
+  Properties: {},
+  WorksheetCount: 3,
+  DefaultFont: Calibri,
+  CalculateMode: Default,
+  Style: {
+    Font: {
+      Name: Calibri
+    }
+  }
+}

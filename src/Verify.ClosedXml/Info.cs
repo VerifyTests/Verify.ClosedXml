@@ -1,6 +1,10 @@
 ﻿class Info
 {
     public required IReadOnlyList<string> SheetNames { get; init; }
+
+    // A hidden sheet has a csv as any other, so this is what says which are hidden. Null, so left
+    // out, for a workbook with none.
+    public IReadOnlyList<string>? HiddenSheets { get; init; }
     public required double ColumnWidth { get; init; }
     public required XLWorkbookProperties Properties { get; init; }
     public required int WorksheetCount { get; init; }
