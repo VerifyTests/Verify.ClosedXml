@@ -5,6 +5,7 @@
     {
         writer.WriteStartObject();
         writer.WriteMember(target, target.SheetNames, "SheetNames");
+        writer.WriteMember(target, target.HiddenSheets, "HiddenSheets");
         writer.WriteMember(target, target.Properties, "Properties");
         writer.WriteMember(target, target.WorksheetCount, "WorksheetCount");
         writer.WriteMember(target, target.Use1904DateSystem, "Use1904DateSystem", false);

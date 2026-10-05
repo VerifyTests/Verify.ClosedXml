@@ -149,7 +149,7 @@ For a given Verify, the result is 3 (or more files)
 
 #### CSV
 
-One per sheet, named for the sheet: `#Sheet1.verified.csv`. A workbook with one sheet is no exception, so that a second sheet adds a file rather than renaming the first.
+One per sheet, named for the sheet: `#Sheet1.verified.csv`. A workbook with one sheet is no exception, so that a second sheet adds a file rather than renaming the first. A hidden sheet has a csv as any other, and is named under `HiddenSheets` in the info file. A sheet is a page, numbered in tab order with hidden sheets counted, so `PagesToInclude` leaves out the csv of a sheet. The info file still names every sheet, and the xlsx is still the whole workbook.
 
 <!-- snippet: Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv -->
 <a id='snippet-Samples.VerifyExcel.DotNet9_0#Sheet1.verified.csv'></a>
@@ -256,7 +256,7 @@ A change to a workbook is a change to several files: the xlsx, its info file, an
 
 ## Migrating from 1.x
 
-Version 2 moves to the [source and derived targets](https://github.com/VerifyTests/Verify/blob/main/docs/converter.md#source-and-derived-targets) of Verify 33.3. `ClosedXmlOutputs` and the `outputs` parameter of `Initialize` are gone. What they chose is chosen with Verify's settings, which can be set for one verification as well as for every test:
+Version 2 moves to the [source and derived targets](https://github.com/VerifyTests/Verify/blob/main/docs/converter.md#source-and-derived-targets) of Verify 33.3. The `outputs` parameter of `Initialize` is gone, and `ClosedXmlOutputs` is obsolete as an error, so that code naming it is pointed here. What they chose is chosen with Verify's settings, which can be set for one verification as well as for every test:
 
 | 1.x | 2.x |
 | --- | --- |

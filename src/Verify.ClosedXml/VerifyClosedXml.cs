@@ -43,11 +43,12 @@ public static class VerifyClosedXml
     static ConversionResult Convert(XLWorkbook book, IReadOnlyDictionary<string, object> context)
     {
         var includeCsv = !context.IsDerivedTargetExcluded("csv");
-        var sheets = Convert(book, includeCsv).ToList();
+        var sheets = Convert(book, includeCsv, context).ToList();
 
         var info = new Info
         {
             SheetNames = sheets.Select(_ => _.Name!).ToList(),
+            HiddenSheets = HiddenSheets(book),
             ColumnWidth = book.ColumnWidth,
             Style = book.Style,
             Properties = book.Properties,
@@ -80,7 +81,10 @@ public static class VerifyClosedXml
         {
             // named for the sheet alone, since Verify adds the name of the target being converted.
             // Even for the only sheet, so that a second one adds a file rather than renaming the first
-            derived.AddRange(sheets.Select(_ => new Target("csv", _.Csv, _.Name)));
+            derived.AddRange(
+                sheets
+                    .Where(_ => _.Included)
+                    .Select(_ => new Target("csv", _.Csv, _.Name)));
         }
 
         // telling the workbook from what was derived from it is what has Verify compare the workbook
@@ -96,11 +100,32 @@ public static class VerifyClosedXml
             });
     }
 
-    static IEnumerable<(StringBuilder Csv, string? Name)> Convert(XLWorkbook document, bool includeCsv)
+    static List<string>? HiddenSheets(XLWorkbook book)
+    {
+        var hidden = book.Worksheets
+            .Where(_ => _.Visibility != XLWorksheetVisibility.Visible)
+            .Select(_ => _.Name)
+            .ToList();
+        if (hidden.Count == 0)
+        {
+            return null;
+        }
+
+        return hidden;
+    }
+
+    // A sheet is a page, numbered in tab order, hidden or not, so PagesToInclude limits the csv
+    // files as it limits the pages of any other document. Every sheet is still walked, and named
+    // in the info file: its values are scrubbed in the workbook whether or not it has a csv.
+    static IEnumerable<(StringBuilder Csv, string? Name, bool Included)> Convert(XLWorkbook document, bool csvWanted, IReadOnlyDictionary<string, object> context)
     {
         var counter = Counter.Current;
-        foreach (var sheet in document.Worksheets)
+        var page = 0;
+        foreach (var sheet in document.Worksheets.OrderBy(_ => _.Position))
         {
+            page++;
+            var included = context.IsPageIncluded(page);
+            var includeCsv = csvWanted && included;
             var builder = new StringBuilder();
 
             foreach (var row in sheet.Rows())
@@ -141,7 +166,7 @@ public static class VerifyClosedXml
                 }
             }
 
-            yield return (builder, sheet.Name);
+            yield return (builder, sheet.Name, included);
         }
     }
 
