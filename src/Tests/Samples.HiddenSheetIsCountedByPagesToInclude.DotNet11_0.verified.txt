@@ -1,0 +1,18 @@
+﻿{
+  SheetNames: [
+    Hidden,
+    Shown
+  ],
+  HiddenSheets: [
+    Hidden
+  ],
+  Properties: {},
+  WorksheetCount: 2,
+  DefaultFont: Calibri,
+  CalculateMode: Default,
+  Style: {
+    Font: {
+      Name: Calibri
+    }
+  }
+}
